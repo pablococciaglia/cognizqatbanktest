@@ -1,12 +1,12 @@
 export interface PersonData {
-  id: number;
+  id: number | undefined;
   name: string;
   username: string;
   email: string;
-  address: Address;
+  address: Address | undefined;
   phone: string;
   website: string;
-  company: Company;
+  company: Company | undefined;
 }
 
 export interface Address {

@@ -1,42 +1,61 @@
-import { FormEvent, useState, FC } from "react";
-import { Button } from "antd";
-import { getPersonData } from "../service/personApi";
-import { BASE_URL } from "../constants/constants";
+import { FC, FormEvent, useState } from "react";
 
-const usersArray = Array.from({ length: 10 }, (_, index) => index + 1);
+import { Button, Divider, Select } from "antd";
+
+import QDBlogo from "../assets/qdb-logo.svg";
+import { getUserData } from "../slices/dataUserSlice";
+import { selectUserFetchStatus } from "../selectors/seletors";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { FetchStatus, USER_LENGTH } from "../constants/constants";
+
+const usersArray = Array.from({ length: USER_LENGTH }, (_, index) => index + 1);
 
 export const LoginScreen: FC = () => {
+  const dispatch = useAppDispatch();
+  const fechStatus = useAppSelector(selectUserFetchStatus);
   const [userNumber, setUserNumber] = useState<undefined | string>();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userNumber) {
-      getPersonData(`${BASE_URL}${userNumber}`);
+      dispatch(getUserData(userNumber));
     }
   };
 
   return (
-    <form method="post" onSubmit={(e) => handleSubmit(e)}>
+    <form
+      method="post"
+      onSubmit={(e) => handleSubmit(e)}
+      style={{
+        height: "100vh",
+        width: "100vw",
+        backgroundColor: "#e3f6fd",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <img height={310} src={QDBlogo} className="App-logo" alt="logo" />
+
       <label>
         Select a user:
-        <select
-          name="selectedUser"
-          onChange={(e) => setUserNumber(e.target.value)}
-          defaultValue={"noSelection"}
-        >
-          <option value={"noSelection"} disabled>
-            Choose here
-          </option>
-          {usersArray.map((user) => (
-            <option key={`loginPage-${user}`} value={user}>
-              {user}
-            </option>
-          ))}
-        </select>
+        <Select
+          autoFocus
+          listHeight={320}
+          placeholder="Select a user"
+          style={{ width: 120 }}
+          onChange={setUserNumber}
+          options={usersArray.map((user) => ({
+            value: user,
+            label: user,
+          }))}
+        />
       </label>
-      <hr />
+      <Divider />
+
       <Button
         disabled={!userNumber}
-        loading={false}
+        loading={fechStatus === FetchStatus.LOADING}
         type="primary"
         htmlType="submit"
       >
