@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { getRandomTime } from "../helpers/getRandomTime";
-import { fetchData, putData } from "../service/serviceApi";
+import { fetchApi, Method } from "../service/serviceApi";
 import { Blog, Blogs, BlogsPlusDateAndImage } from "../types/blogsTypes";
 import {
   BASE_URL,
@@ -27,7 +27,7 @@ export const getBlogsData = createAsyncThunk(
   "blogs/fetchBlogs",
   async (userNumber: string) => {
     const url = `${BASE_URL}/users/${userNumber}/posts`;
-    const response = await fetchData(url);
+    const response = await fetchApi<Blogs>(url);
     return response;
   }
 );
@@ -36,7 +36,7 @@ export const editPost = createAsyncThunk(
   "blogs/editPost",
   async (payload: Blog) => {
     const url = `${BASE_URL}/posts/${payload.userId}`;
-    const response = await putData(url, payload);
+    const response = await fetchApi<Blog>(url, Method.PUT, payload);
     return response;
   }
 );

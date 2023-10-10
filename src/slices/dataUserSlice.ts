@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { PersonData } from "../types/personTypes";
-import { fetchData } from "../service/serviceApi";
+import { fetchApi } from "../service/serviceApi";
 import { BASE_URL, FetchStatus } from "../constants/constants";
 
 export interface DataUserState {
@@ -29,7 +29,7 @@ export const getUserData = createAsyncThunk(
   "dataUser/fetchUser",
   async (userNumber: string) => {
     const url = `${BASE_URL}/users/${userNumber}`;
-    const response = await fetchData(url);
+    const response = await fetchApi<PersonData>(url);
     return response;
   }
 );
