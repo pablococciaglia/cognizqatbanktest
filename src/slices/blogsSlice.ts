@@ -112,7 +112,7 @@ export const dataBlogsSlice = createSlice({
       .addCase(getBlogsData.fulfilled, (state, action) => {
         state.status = FetchStatus.IDLE;
         if (action.payload) {
-          const payloadWithDatePhotoNum = (action.payload as Blogs).map(
+          const payloadWithDatePhotoNum = (action.payload).map(
             (blog) => ({
               ...blog,
               date: getRandomTime(),

@@ -48,7 +48,7 @@ export const dataUserSlice = createSlice({
       .addCase(getUserData.fulfilled, (state, action) => {
         state.status = FetchStatus.IDLE;
         if (action.payload) {
-          state.user = action.payload as PersonData;
+          state.user = action.payload;
           state.logged = true;
         }
       })
